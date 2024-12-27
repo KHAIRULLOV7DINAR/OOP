@@ -1,0 +1,7 @@
+a Attack
+u Ability
+s Save
+l Load
+e Exit
+i Input_ships
+p Pass
