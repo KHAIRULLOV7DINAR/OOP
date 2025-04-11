@@ -1,0 +1,937 @@
+Лабораторная работа 1
+
+
+ФИО:
+Хайруллов Динар Линарович
+
+
+Группа:
+3342
+
+
+Вывод текущей даты и времени:
+dinar@Ubuntu:~$ date
+
+Вс 06 апр 2025 18:24:16 UTC
+
+
+Информация о процессоре:
+dinar@Ubuntu:~$ lscpu
+
+Архитектура:                          x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Порядок байт:                         Little Endian
+CPU(s):                               4
+On-line CPU(s) list:                  0-3
+ID прроизводителя:                    AuthenticAMD
+Имя модели:                           AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+Семейство ЦПУ:                        23
+Модель:                               24
+Потоков на ядро:                      1
+Ядер на сокет:                        4
+Сокетов:                              1
+Степпинг:                             1
+BogoMIPS:                             4192,11
+Флаги:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 avx2 bmi2 rdseed adx clflushopt sha_ni arat
+Разработчик гипервизора:              KVM
+Тип виртуализации:                    полный
+L1d cache:                            128 KiB (4 instances)
+L1i cache:                            256 KiB (4 instances)
+L2 cache:                             2 MiB (4 instances)
+L3 cache:                             16 MiB (4 instances)
+NUMA node(s):                         1
+NUMA node0 CPU(s):                    0-3
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Mitigation; untrained return thunk; SMT disabled
+Vulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:      Not affected
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+
+Информация о системе:
+dinar@Ubuntu:~$ uname -a
+
+Linux Ubuntu 6.11.0-21-generic #21~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 24 16:52:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+
+1. Задание 1. Типы файлов ОС, утилита ls:
+
+1.1. Обычный файл(-):
+#Нахождение файла
+dinar@Ubuntu:~$ ls -lR 2>/dev/null | grep "^-" | head -n 1
+
+-rw-rw-r-- 1 dinar dinar 3229 апр  6 19:30 log.log
+
+#Нахождение полного пути до файла
+dinar@Ubuntu:~$ find / -name "log.log" 2>/dev/null | head -n 1
+
+/home/dinar/log.log
+
+
+1.2. Файл блочного устройства(b):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^b" | head -n 1
+
+brw-r--r-- 1 root  root  11, 0 апр  6 20:09 b_test
+
+dinar@Ubuntu:~$ find / -name "b_test" 2>/dev/null | head -n 1
+
+/home/dinar/b_test
+
+
+1.3. Файл символьного устройства устройства(c):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^c" | head -n 1
+
+crw-r--r-- 1 root  root  89, 1 апр  6 20:12 c_test
+
+dinar@Ubuntu:~$ find / -name "c_test" 2>/dev/null | head -n 1
+
+
+/home/dinar/c_test
+
+
+1.4. Директория(d):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^d" | head -n 1
+
+drwx------ 5 dinar dinar  4096 апр  6 19:56 snap
+
+dinar@Ubuntu:~$ find / -name "snap" 2>/dev/null | head -n 1
+
+/usr/share/bash-completion/completions/snap
+
+
+1.5. Символьная ссылка(l):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^l" | head -n 1
+
+lrwxrwxrwx 1 dinar dinar     6 апр  6 20:17 link.txt -> b_test
+
+dinar@Ubuntu:~$ find / -name "link.txt" 2>/dev/null | head -n 1
+
+/home/dinar/link.txt
+
+
+1.6. Именованный канал(FIFO):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^p" | head -n 1
+
+prw-r--r-- 1 root  root      0 апр  6 20:22 test_fifo
+
+dinar@Ubuntu:~$ find / -name "test_fifo" 2>/dev/null | head -n 1
+
+/home/dinar/test_fifo
+
+
+1.7. Сокет(s):
+dinar@Ubuntu:~$ sudo ls -lR 2>/dev/null | grep "^s" | head -n 1
+
+srwxrwxr-x 1 dinar dinar     0 апр  7 08:05 mysocket.sock
+
+dinar@Ubuntu:~$ find / -name "test_fifo" 2>/dev/null | head -n 1
+
+/home/dinar/mysocket.sock
+
+Для выполнения задания был написан скрипт 1_task.sh. Результаты работы скрипта:
+Создание выходного файла для записи результатов скрипта:
+dinar@Ubuntu:~$ touch 1_output_file.txt
+dinar@Ubuntu:~$ bash 1_task.sh 1_output_file.txt 
+
+Содержимое файла 1_output_file.txt:
+
+Обычный файл:
+/home/dinar/10_task
+==================================
+Блочное устройство(b):
+/home/dinar/b_test
+==================================
+Символьное устройство(c):
+/home/dinar/c_test
+==================================
+Директория(d):
+/home/dinar/ningth_task
+==================================
+Символьная ссылка(l):
+/home/dinar/12_task.txt
+==================================
+FIFO(p):
+/home/dinar/test_fifo
+==================================
+Сокет(s):
+/home/dinar/mysocket.sock
+==================================
+
+
+2. Задание 2. Получение жестких ссылок на файл:
+
+Создадим файл, на которые будут ссылаться ссылки:
+dinar@Ubuntu:~$ touch scnd_task_link_file.txt
+
+Создадим директорию, в которой будет лежать одна из ссылок:
+dinar@Ubuntu:~$ mkdir scdn_task_link_dir
+
+Создание первой жесткой ссылки:
+dinar@Ubuntu:~$ ln scnd_task_link_file.txt f_link
+
+Переход в созданную ранее директорию и создание второй жесткой ссылки:
+dinar@Ubuntu:~$ cd scdn_task_link_dir/
+dinar@Ubuntu:~/scdn_task_link_dir$ ln ../scnd_task_link_file.txt s_link
+
+Определение inode нашего файла:
+dinar@Ubuntu:~/scdn_task_link_dir$ cd
+dinar@Ubuntu:~$ ls -li scnd_task_link_file.txt | awk '{print $1}'
+
+1574020
+
+Нахождение всех файлов с найденным inode(сам файл и ссылки на него):
+dinar@Ubuntu:~$ ls -lRi | grep "1574020"
+
+1574020 -rw-rw-r-- 3 dinar dinar     0 апр  7 19:04 f_link
+1574020 -rw-rw-r-- 3 dinar dinar     0 апр  7 19:04 scnd_task_link_file.txt
+1574020 -rw-rw-r-- 3 dinar dinar 0 апр  7 19:04 s_link
+
+Для нахождения всех жестких ссылок на задаваемый файл был написан скрипт 2_task.sh. Проверка работы скрипта:
+dinar@Ubuntu:~$ bash 2_task.sh scnd_task_link_file.txt 
+
+1574020 -rw-rw-r-- 3 dinar dinar     0 апр  7 19:04 f_link
+1574020 -rw-rw-r-- 3 dinar dinar     0 апр  7 19:04 scnd_task_link_file.txt
+1574020 -rw-rw-r-- 3 dinar dinar  0 апр  7 19:04 s_link
+
+Были найдены все файлы с таким же inode, как и у файла, на которые ссылаются жесткие ссылки.
+
+
+3. Задание 3. Способы формирования символьных ссылок:
+
+3.1. Создание при помощи команды ln:
+dinar@Ubuntu:~$ ln -s scnd_task_link_file.txt 3_1_link
+
+Вывод информации о символьной ссылке:
+dinar@Ubuntu:~$ ls -l 3_1_link 
+
+lrwxrwxrwx 1 dinar dinar 23 апр  7 19:24 3_1_link -> scnd_task_link_file.txt
+
+3.2. Создание при помощи команды link:
+Команда link создает жесткие ссылки, но не символьные. Это можно проверить, узнав inode  ссылок. У ссылки, созданной с помощью link inode будет таким же, как и у самого файла, в отличие от символьной ссылки, которая только хранит полный путь на ссылаемый файл.
+
+3.3. Создание с помощью команды cp:
+dinar@Ubuntu:~$ cd scdn_task_link_dir/
+dinar@Ubuntu:~/scdn_task_link_dir$ cp -s ../scnd_task_link_file.txt 3_3_link
+dinar@Ubuntu:~/scdn_task_link_dir$ ls -l 3_3_link 
+
+lrwxrwxrwx 1 dinar dinar 26 апр  7 19:33 3_3_link -> ../scnd_task_link_file.txt
+
+Для нахождения всех символьных ссылок на файл и подсчета их кол-ва был разработан скрипт 3_task.sh. Результаты работы скрипта:
+dinar@Ubuntu:~$ bash 3_task.sh scnd_task_link_file.txt 
+
+/home/dinar/3_1_link
+/home/dinar/scdn_task_link_dir/3_3_link
+Кол-во найденных символьных ссылок: 2
+
+Скрипт нашел все ранее созданные символьные ссылки на файл и вывел их кол-во.
+
+
+4. Задание 4. Получение всех символьных ссылок:
+4.1. Для выполнения задания был реализовани скрипт 4_task.sh:
+#!/bin/bash
+
+#Получение имени файла, на которые ссылаются символьные ссылки:
+if [ -z "$1" ]; then
+    echo "Использование: $0 <filename>"
+    exit 1
+fi
+
+target=$(realpath "$1")
+
+#Поиск символьных ссылок на полученный файл с помощью find:
+find ~/ -type l 2>/dev/null | while read LINK; do
+    # Проверка, на какой файл указывает ссылка
+    if [ "$(readlink -f "$LINK")" == "$target" ]; then
+        echo "$LINK"
+    fi
+done
+
+Результаты выполнения скрипта:
+dinar@Ubuntu:~$ bash 4_task.sh scnd_task_link_file.txt 
+
+/home/dinar/3_1_link
+/home/dinar/scdn_task_link_dir/3_3_link
+
+Скрипт нашел все символьные ссылки.
+
+
+5. Задание 5. Изучение утилиты find:
+Утилита find позволяет находить файлы разных типов по различным характеристикам, используя флаги команды
+
+5.1. Поиск по имени:
+dinar@Ubuntu:~$ sudo find / -name "*.log" | head -n 3
+[sudo] пароль для dinar: 
+
+/usr/share/doc/python3.12/pybench.log
+/home/dinar/log.log
+/home/dinar/.local/share/gvfs-metadata/root-678bc0bb.log
+
+5.2. Поиск по типу файла:
+dinar@Ubuntu:~$ find . -type f | head -n 3
+
+./.bashrc
+./.log.log.swp
+./.lesshst
+
+5.3. Поиск по размеру файла(файлы больше 100мб):
+dinar@Ubuntu:~$ sudo find / -size +100M | head -n 3
+
+/usr/lib/llvm-18/lib/libLLVM.so.1
+/usr/lib/x86_64-linux-gnu/libLLVM.so.19.1
+/snap/gnome-42-2204/202/usr/lib/x86_64-linux-gnu/libLLVM-15.so.1
+
+5.4. Поиск по времени(файлы измененные за полседние 10 дней):
+dinar@Ubuntu:~$ sudo find . -mtime -10 -type f | head -n 3
+
+./.log.log.swp
+./.lesshst
+./f_link
+
+5.5. Вывод расширенной информации для файлов каждого типа:
+Для вывода расширенной информации совместно используются команды find и ls:
+
+5.5.1. Обычный файл:
+dinar@Ubuntu:~$ sudo find . -type f -exec ls -l {} \; | head -n 1
+
+-rw-r--r-- 1 dinar dinar 3771 мар 31  2024 ./.bashrc
+
+5.5.2. Директория:
+dinar@Ubuntu:~$ sudo find . -type d -exec ls -l {} \; | head -n 2
+
+итого 60
+lrwxrwxrwx 1 dinar dinar    23 апр  7 19:24 3_1_link -> scnd_task_link_file.txt
+
+5.5.3. Файл блочного устройства:
+dinar@Ubuntu:~$ sudo find . -type b -exec ls -l {} \; | head -n 1
+
+brw-r--r-- 1 root root 11, 0 апр  6 20:09 ./b_test
+
+5.5.4. Символьная ссылка:
+dinar@Ubuntu:~$ sudo find . -type l -exec ls -l {} \; | head -n 1
+
+lrwxrwxrwx 1 dinar dinar 6 апр  6 20:17 ./link.txt -> b_test
+
+5.5.5. Файл символьного устройства:
+dinar@Ubuntu:~$ sudo find . -type c -exec ls -l {} \; | head -n 1
+
+crw-r--r-- 1 root root 89, 1 апр  6 20:12 ./c_test
+
+5.5.6. Именнованный канал (FIFO):
+dinar@Ubuntu:~$ sudo find . -type p -exec ls -l {} \; | head -n 1
+
+prw-r--r-- 1 root root 0 апр  6 20:22 ./test_fifo
+
+5.5.7. Сокет:
+dinar@Ubuntu:~$ sudo find . -type s -exec ls -l {} \; | head -n 1
+
+srwxrwxr-x 1 dinar dinar 0 апр  6 16:15 ./.cache/ibus/dbus-Da7qnivk
+
+5.6.Создание вложенных команд
+Вывод расширенной информации с помощью ls -l всех найденных файлов,имена которых кончаются на ".log"с помощью команды find:
+dinar@Ubuntu:~$ find . -type f -name "*.log" -exec ls -l {} \;
+
+-rw-rw-r-- 1 dinar dinar 10008 апр  7 21:04 ./log.log
+-rw-rw-r-- 1 dinar dinar 32768 апр  7 21:05 ./.local/share/gvfs-metadata/home-2e4b6233.log
+-rw-rw-r-- 1 dinar dinar 32768 апр  7 18:42 ./.local/share/gvfs-metadata/root-678bc0bb.log
+
+
+6. Задание 6. Изучение утилит od и hexdump:
+Создание директории с файлами для дальнейшего анализа:
+dinar@Ubuntu:~$ mkdir sixth_task
+dinar@Ubuntu:~$ cd sixth_task/
+dinar@Ubuntu:~/sixth_task$ touch txt.txt mp3.mp3 jpg.jpg
+dinar@Ubuntu:~/sixth_task$ ls
+
+jpg.jpg  mp3.mp3  txt.txt
+
+6.1. Использование команды od для вывода информации о файлах:
+dinar@Ubuntu:~/sixth_task$ find . -type f -exec sh -c 'echo "$1"; od -A x -t x1z -N 64 "$1"' sh {} \;
+
+./txt.txt
+000000
+./jpg.jpg
+000000
+./mp3.mp3
+000000
+
+6.2. Использование команды od для анализа директории:
+dinar@Ubuntu:~$ od -A x -t x1z -N 64 sixth_task/
+
+od: sixth_task/: Это каталог
+000000
+
+6.3. Использование команды hexdump для вывода информации о файлах:
+dinar@Ubuntu:~/sixth_task$ find . -type f -exec sh -c 'echo "$1"; hexdump -C -n 64 "$1"' sh {} \;
+
+./txt.txt
+./jpg.jpg
+./mp3.mp3
+
+6.4. Использование команды hexdump для анализа директории:
+dinar@Ubuntu:~$ hexdump -C -n 64 sixth_task/
+
+hexdump: sixth_task/: Это каталог
+
+
+7. Задание 7. Размер каталога:
+7.1. Создание и определение размера вновь созданного каталога:
+dinar@Ubuntu:~$ mkdir seventh_task
+dinar@Ubuntu:~$ du -sh seventh_task/
+
+4,0K	seventh_task/
+Размер вновь созданного каталога = 4 килобайт
+7.2 Написание скрипта
+Был написан скрипт для анализа размера каталога при создании файлов и подкаталогов внутри изначального каталога. Результаты выполнения скрипта:
+dinar@Ubuntu:~$ bash 7_task.sh 
+
+Создан каталог 7_task_dir
+4,0K	7_task_dir
+Добавлен файл номер 1
+Добавлен каталог номер 1
+12K	7_task_dir
+Добавлен файл номер 2
+Добавлен каталог номер 2
+20K	7_task_dir
+Добавлен файл номер 3
+Добавлен каталог номер 3
+28K	7_task_dir
+Добавлен файл номер 4
+Добавлен каталог номер 4
+36K	7_task_dir
+Добавлен файл номер 5
+Добавлен каталог номер 5
+44K	7_task_dir
+44K	7_task_dir
+Удалены все файлы и каталоги в директории 7_task_dir
+4,0K	7_task_dir
+Каталог был удален.
+
+
+8. Задание 8. Ознакомление с содержимым /etc/passwd, /etc/shadow, с утилитой /usr/bin/passwd:
+8.1. Анализ содержимого /etc/passwd:
+dinar@Ubuntu:~$ cat /etc/passwd
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+systemd-timesync:x:996:996:systemd Time Synchronization:/:/usr/sbin/nologin
+dhcpcd:x:100:65534:DHCP Client Daemon,,,:/usr/lib/dhcpcd:/bin/false
+messagebus:x:101:101::/nonexistent:/usr/sbin/nologin
+syslog:x:102:102::/nonexistent:/usr/sbin/nologin
+systemd-resolve:x:991:991:systemd Resolver:/:/usr/sbin/nologin
+uuidd:x:103:103::/run/uuidd:/usr/sbin/nologin
+usbmux:x:104:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+tss:x:105:105:TPM software stack,,,:/var/lib/tpm:/bin/false
+systemd-oom:x:990:990:systemd Userspace OOM Killer:/:/usr/sbin/nologin
+kernoops:x:106:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+whoopsie:x:107:109::/nonexistent:/bin/false
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+avahi:x:108:111:Avahi mDNS daemon,,,:/run/avahi-daemon:/usr/sbin/nologin
+tcpdump:x:109:112::/nonexistent:/usr/sbin/nologin
+sssd:x:110:113:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+speech-dispatcher:x:111:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+cups-pk-helper:x:112:114:user for cups-pk-helper service,,,:/nonexistent:/usr/sbin/nologin
+fwupd-refresh:x:989:989:Firmware update daemon:/var/lib/fwupd:/usr/sbin/nologin
+saned:x:113:116::/var/lib/saned:/usr/sbin/nologin
+geoclue:x:114:117::/var/lib/geoclue:/usr/sbin/nologin
+cups-browsed:x:115:114::/nonexistent:/usr/sbin/nologin
+hplip:x:116:7:HPLIP system user,,,:/run/hplip:/bin/false
+gnome-remote-desktop:x:988:988:GNOME Remote Desktop:/var/lib/gnome-remote-desktop:/usr/sbin/nologin
+polkitd:x:987:987:User for polkitd:/:/usr/sbin/nologin
+rtkit:x:117:119:RealtimeKit,,,:/proc:/usr/sbin/nologin
+colord:x:118:120:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+gnome-initial-setup:x:119:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:120:121:Gnome Display Manager:/var/lib/gdm3:/bin/false
+nm-openvpn:x:121:122:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+dinar:x:1000:1000:dinar:/home/dinar:/bin/bash
+
+Можно определить, что файл содержит в себе информацию о пользователях системы. Каждая строка содержит в себе информаци о пользователе в следующем формате: username:x:UID:GID:gecos:/home/dir:/bin/shell
+
+Анализ прав доступа к файлу:
+dinar@Ubuntu:~$ ls -l /etc/passwd
+
+-rw-r--r-- 1 root root 2861 апр  6 16:09 /etc/passwd
+
+Файл доступен для чтения всем группам пользователей, редактирование доступно владельцу.
+
+8.2. Анализ содержимого /etc/shadow:
+dinar@Ubuntu:~$ sudo cat /etc/shadow
+
+root:*:20134:0:99999:7:::
+daemon:*:20134:0:99999:7:::
+bin:*:20134:0:99999:7:::
+sys:*:20134:0:99999:7:::
+sync:*:20134:0:99999:7:::
+games:*:20134:0:99999:7:::
+man:*:20134:0:99999:7:::
+lp:*:20134:0:99999:7:::
+mail:*:20134:0:99999:7:::
+news:*:20134:0:99999:7:::
+uucp:*:20134:0:99999:7:::
+proxy:*:20134:0:99999:7:::
+www-data:*:20134:0:99999:7:::
+backup:*:20134:0:99999:7:::
+list:*:20134:0:99999:7:::
+irc:*:20134:0:99999:7:::
+_apt:*:20134:0:99999:7:::
+nobody:*:20134:0:99999:7:::
+systemd-network:!*:20134::::::
+systemd-timesync:!*:20134::::::
+dhcpcd:!:20134::::::
+messagebus:!:20134::::::
+syslog:!:20134::::::
+systemd-resolve:!*:20134::::::
+uuidd:!:20134::::::
+usbmux:!:20134::::::
+tss:!:20134::::::
+systemd-oom:!*:20134::::::
+kernoops:!:20134::::::
+whoopsie:!:20134::::::
+dnsmasq:!:20134::::::
+avahi:!:20134::::::
+tcpdump:!:20134::::::
+sssd:!:20134::::::
+speech-dispatcher:!:20134::::::
+cups-pk-helper:!:20134::::::
+fwupd-refresh:!*:20134::::::
+saned:!:20134::::::
+geoclue:!:20134::::::
+cups-browsed:!:20134::::::
+hplip:!:20134::::::
+gnome-remote-desktop:!*:20134::::::
+polkitd:!*:20134::::::
+rtkit:!:20134::::::
+colord:!:20134::::::
+gnome-initial-setup:!:20134::::::
+gdm:!:20134::::::
+nm-openvpn:!:20134::::::
+dinar:$6$ZJt7EmI6N1L9dO0u$dTAAu8HtAfdHh2CTsIdYP1Q0uSxUrVILNn86oyE1dZo9w4TUPuKmZi5wstIuhoWrlieKI8HyP87qDjtN/YZY/0:20184:0:99999:7:::
+
+Файл содержит в себе информацию о паролях пользователей и о их сроке действия.
+
+Анализ прав доступа к файлу:
+dinar@Ubuntu:~$ ls -l /etc/shadow
+
+-rw-r----- 1 root shadow 1338 апр  6 16:09 /etc/shadow
+
+Файл доступен для чтения владельцу и группе shadow, редактирование доступно владельцу.
+
+
+
+9. Задание 9. Исследование прав владения и доступа, а также их сочетаемости:
+Создание каталога с файлами для выполнения задания:
+dinar@Ubuntu:~$ mkdir ningth_task
+dinar@Ubuntu:~$ cd ningth_task/
+dinar@Ubuntu:~/ningth_task$ touch f1.txt f2.txt f3.txt
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f1.txt
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f3.txt
+
+9.1. Использование утилит chmod, chown:
+Предоставление всех прав доступа к файлу f1.txt всем группам пользователей командой chmod:
+dinar@Ubuntu:~/ningth_task$ chmod 777 f1.txt 
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwxrwxrwx 1 dinar dinar 0 апр  7 22:40 f1.txt
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f3.txt
+
+Запрет на чтение файла f2.txt всем пользователям, кроме владельца:
+dinar@Ubuntu:~/ningth_task$ chmod go-r f2.txt
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwxrwxrwx 1 dinar dinar 0 апр  7 22:40 f1.txt
+-rw--w---- 1 dinar dinar 0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 dinar dinar 0 апр  7 22:40 f3.txt
+
+Изменение владельца файла f3.txt на root с помощью команды chown:
+dinar@Ubuntu:~/ningth_task$ sudo chown root f3.txt 
+
+[sudo] пароль для dinar: 
+
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwxrwxrwx 1 dinar dinar 0 апр  7 22:40 f1.txt
+-rw--w---- 1 dinar dinar 0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 root  dinar 0 апр  7 22:40 f3.txt
+
+Создание новой группы, замена группы файла f3.txt  с помощью команды chown:
+dinar@Ubuntu:~/ningth_task$ sudo groupadd ninth_task_group
+dinar@Ubuntu:~/ningth_task$ sudo chown :ninth_task_group f3.txt 
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwxrwxrwx 1 dinar dinar            0 апр  7 22:40 f1.txt
+-rw--w---- 1 dinar dinar            0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 root  ninth_task_group 0 апр  7 22:40 f3.txt
+
+9.2.  Расширение права исполнения экспериментального файла с помощью флага SUID:
+dinar@Ubuntu:~/ningth_task$ chmod u+s f1.txt 
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwsrwxrwx 1 dinar dinar            0 апр  7 22:40 f1.txt
+-rw--w---- 1 dinar dinar            0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 root  ninth_task_group 0 апр  7 22:40 f3.txt
+
+Все пользватели могут выполнять файл f1.txt с правами владельца.
+
+9.3. Анализ формирования итоговых прав на использование файла, если права пользователя и группы, в которую он входит, различны:
+Создание новой группы и пользователя, добавление нового пользователя в группу:
+dinar@Ubuntu:~/ningth_task$ sudo adduser test_user
+dinar@Ubuntu:~/ningth_task$ sudo groupadd test_group
+dinar@Ubuntu:~/ningth_task$ sudo usermod -aG test_group test_user
+dinar@Ubuntu:~/ningth_task$ chmod 640 f2.txt
+dinar@Ubuntu:~/ningth_task$ sudo chown test_user:test_group f2.txt
+dinar@Ubuntu:~/ningth_task$ ls -l
+
+-rwsrwxrwx 1 dinar     dinar            0 апр  7 22:40 f1.txt
+-rw-r----- 1 test_user test_group       0 апр  7 22:40 f2.txt
+-rw-rw-r-- 1 root      ninth_task_group 0 апр  7 22:40 f3.txt
+
+Войдем под пользователем test_user:
+dinar@Ubuntu:~/ningth_task$ su test_user
+
+Пароль: 
+test_user@Ubuntu:/home/dinar/ningth_task$ date > f2.txt
+
+Содержимое файла:
+Пн 07 апр 2025 23:25:03 UTC
+
+Это означает, что пользователь имеет доступ к чтению файла и записи, хоть члены группы, в которой он состоит, имеют доступ лишь к чтению файла.
+
+9.4. Сопоставление возможности исполнения наиболее часто используемых операций при варьировании прав доступа к файлу и каталогу:
+Создание нового файла, запись в него текста, изменения прав доступа к файлу, попытка прочесть текст из файла:
+dinar@Ubuntu:~/ningth_task$ touch f4.txt
+dinar@Ubuntu:~/ningth_task$ ls -l f4.txt
+
+-rw-rw-r-- 1 dinar     dinar             0 апр  7 23:36 f4.txt
+
+dinar@Ubuntu:~/ningth_task$ echo "test" > f4.txt
+dinar@Ubuntu:~/ningth_task$ chmod 000 f4.txt
+dinar@Ubuntu:~/ningth_task$ cat f4.txt 
+cat: f4.txt: Отказано в доступе
+
+dinar@Ubuntu:~/ningth_task$ ls -l f4.txt 
+
+---------- 1 dinar dinar 5 апр  7 23:36 f4.txt
+
+Добавление права чтения:
+dinar@Ubuntu:~/ningth_task$ chmod 400 f4.txt 
+dinar@Ubuntu:~/ningth_task$ ls -l f4.txt
+
+-r-------- 1 dinar dinar 5 апр  7 23:36 f4.txt
+
+dinar@Ubuntu:~/ningth_task$ cat f4.txt
+
+test
+
+Создание новой директории, перемещение f4.txt  в новую директорию, изменение прав доступа к директории и попытка прочесть содержимое файла:
+dinar@Ubuntu:~/ningth_task$ mkdir test
+dinar@Ubuntu:~/ningth_task$ mv f4.txt test
+dinar@Ubuntu:~/ningth_task$ chmod 000 test
+dinar@Ubuntu:~/ningth_task$ cat ./test/f4.txt
+
+cat: ./test/f4.txt: Отказано в доступе
+
+Хоть у пользователя есть право доступа к чтению файла, но у него нет права доступа к обращению к содержимому директории, поэтому получить доступ к файлу в директории невозможно, если не изменить права доступа к директории.
+
+
+
+Задание 10. Программа-шлюз:
+Компиляция программы на С:
+dinar@Ubuntu:~$ gcc -o 10_task 10_task.c 
+
+Изменения прав доступа к исполняемому файлу:
+dinar@Ubuntu:~$ sudo chmod u+s 10_task
+
+Создание нового файла, предоставление прав доступа к чтению и записи только владельцу, запись текста в файл:
+dinar@Ubuntu:~$ touch 10_task_file.txt
+dinar@Ubuntu:~$ echo "some data" > 10_task
+dinar@Ubuntu:~$ chmod 600 10_task_file.txt 
+dinar@Ubuntu:~$ ls -l 10_task_file.txt
+
+-rw------- 1 dinar dinar 10 апр  8 00:22 10_task_file.txt
+
+Перемещение test_user в группу владельца и запуск программы-шлюза от имени test_user:
+dinar@Ubuntu:~$ sudo usermod -aG dinar test_user
+dinar@Ubuntu:~$ sudo -u test_user ./10_task 10_task_file.txt 
+
+some data
+
+Перемещение test_user в test_group и запуск программы-шлюза:
+dinar@Ubuntu:~$ sudo usermod -aG test_group test_user
+dinar@Ubuntu:~$ sudo -u test_user ./10_task 10_task_file.txt
+
+some data
+
+В каждом из случаев программа-шлюз смогла получить доступ к файлу вне зависимости от того, в какой группе находился пользователь, от имени которого выполнялась программа-шлюз, ведь сама программа выполнялась с правами владельца, а не правами test_user.
+
+
+11. Задание 11. Файловые системы:
+11.1 Вывод информации о смонтированных файловых системах  с помощью утилиты df:
+dinar@Ubuntu:~$ df -h
+
+Файл.система   Размер Использовано  Дост Использовано% Cмонтировано в
+tmpfs            392M         1,6M  390M            1% /run
+/dev/sda2         32G         5,9G   24G           20% /
+tmpfs            2,0G            0  2,0G            0% /dev/shm
+tmpfs            5,0M         8,0K  5,0M            1% /run/lock
+tmpfs            392M         140K  392M            1% /run/user/1000
+
+Вывод информации о всех смонтированных ФС с помощью утилиты mount:
+dinar@Ubuntu:~$ mount
+
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=1966756k,nr_inodes=491689,mode=755,inode64)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=400892k,mode=755,inode64)
+/dev/sda2 on / type ext4 (rw,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k,inode64)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=32,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=2672)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,nosuid,nodev,relatime,pagesize=2M)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+/var/lib/snapd/snaps/bare_5.snap on /snap/bare/5 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core22_1748.snap on /snap/core22/1748 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/firefox_5751.snap on /snap/firefox/5751 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/firmware-updater_167.snap on /snap/firmware-updater/167 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gnome-42-2204_202.snap on /snap/gnome-42-2204/202 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gtk-common-themes_1535.snap on /snap/gtk-common-themes/1535 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snap-store_1248.snap on /snap/snap-store/1248 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd_23545.snap on /snap/snapd/23545 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snap-store_1270.snap on /snap/snap-store/1270 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd-desktop-integration_253.snap on /snap/snapd-desktop-integration/253 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /run/snapd/ns type tmpfs (rw,nosuid,nodev,noexec,relatime,size=400892k,mode=755,inode64)
+nsfs on /run/snapd/ns/snapd-desktop-integration.mnt type nsfs (rw)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=400888k,nr_inodes=100222,mode=700,uid=1000,gid=1000,inode64)
+portal on /run/user/1000/doc type fuse.portal (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+gvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+nsfs on /run/snapd/ns/firefox.mnt type nsfs (rw)
+tracefs on /sys/kernel/debug/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+nsfs on /run/snapd/ns/firmware-updater.mnt type nsfs (rw)
+
+Вывод информации о ФС, которые могут быть смонтированы при загрузке системы, из файла /etc/fstab:
+dinar@Ubuntu:~$ cat /etc/fstab
+
+/dev/disk/by-uuid/2daf76a1-e7b2-4e65-b7d2-68d6e4ce2dec / ext4 defaults 0 1
+
+11.2. Образы диска и полного дерева ФС:
+Анализ вывода команды df:
+
+Структура образа:
+Основной раздел с ФС:
+/dev/sda2
+ФС ext4
+Размер: 32 гб
+
+Временные ФС:
+tmpfs
+Размер: варьируется
+
+Вывод полного дерева ФС:
+dinar@Ubuntu:~$ findmnt
+
+TARGET                   SOURCE  FSTYPE   OPTIONS
+/                        /dev/sda2
+                                 ext4     rw,relatime
+├─/sys                   sysfs   sysfs    rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/kernel/security securityfs
+│ │                              security rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/cgroup       cgroup2 cgroup2  rw,nosuid,nodev,noexec,relatime,nsdele
+│ ├─/sys/fs/pstore       pstore  pstore   rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/bpf          bpf     bpf      rw,nosuid,nodev,noexec,relatime,mode=7
+│ ├─/sys/kernel/debug    debugfs debugfs  rw,nosuid,nodev,noexec,relatime
+│ │ └─/sys/kernel/debug/tracing
+│ │                      tracefs tracefs  rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/kernel/tracing  tracefs tracefs  rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/fuse/connections
+│ │                      fusectl fusectl  rw,nosuid,nodev,noexec,relatime
+│ └─/sys/kernel/config   configfs
+│                                configfs rw,nosuid,nodev,noexec,relatime
+├─/proc                  proc    proc     rw,nosuid,nodev,noexec,relatime
+│ └─/proc/sys/fs/binfmt_misc
+│                        systemd-1
+│                                autofs   rw,relatime,fd=32,pgrp=1,timeout=0,min
+│   └─/proc/sys/fs/binfmt_misc
+│                        binfmt_misc
+│                                binfmt_m rw,nosuid,nodev,noexec,relatime
+├─/dev                   udev    devtmpfs rw,nosuid,relatime,size=1966756k,nr_in
+│ ├─/dev/pts             devpts  devpts   rw,nosuid,noexec,relatime,gid=5,mode=6
+│ ├─/dev/shm             tmpfs   tmpfs    rw,nosuid,nodev,inode64
+│ ├─/dev/mqueue          mqueue  mqueue   rw,nosuid,nodev,noexec,relatime
+│ └─/dev/hugepages       hugetlbfs
+│                                hugetlbf rw,nosuid,nodev,relatime,pagesize=2M
+├─/run                   tmpfs   tmpfs    rw,nosuid,nodev,noexec,relatime,size=4
+│ ├─/run/lock            tmpfs   tmpfs    rw,nosuid,nodev,noexec,relatime,size=5
+│ ├─/run/user/1000       tmpfs   tmpfs    rw,nosuid,nodev,relatime,size=400888k,
+│ │ ├─/run/user/1000/doc portal  fuse.por rw,nosuid,nodev,relatime,user_id=1000,
+│ │ └─/run/user/1000/gvfs
+│ │                      gvfsd-fuse
+│ │                              fuse.gvf rw,nosuid,nodev,relatime,user_id=1000,
+│ └─/run/snapd/ns        tmpfs[/snapd/ns]
+│                                tmpfs    rw,nosuid,nodev,noexec,relatime,size=4
+│   ├─/run/snapd/ns/snapd-desktop-integration.mnt
+│   │                    nsfs[mnt:[4026532435]]
+│   │                            nsfs     rw
+│   ├─/run/snapd/ns/firefox.mnt
+│   │                    nsfs[mnt:[4026532259]]
+│   │                            nsfs     rw
+│   └─/run/snapd/ns/firmware-updater.mnt
+│                        nsfs[mnt:[4026533071]]
+│                                nsfs     rw
+├─/snap/bare/5           /dev/loop0
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/core22/1748      /dev/loop1
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/firefox/5751     /dev/loop2
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/firmware-updater/167
+│                        /dev/loop3
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/gnome-42-2204/202
+│                        /dev/loop4
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/gtk-common-themes/1535
+│                        /dev/loop5
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/snap-store/1248  /dev/loop6
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/snapd/23545      /dev/loop7
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+├─/snap/snap-store/1270  /dev/loop8
+│                                squashfs ro,nodev,relatime,errors=continue,thre
+└─/snap/snapd-desktop-integration/253
+                         /dev/loop9
+                                 squashfs ro,nodev,relatime,errors=continue,thre
+
+Формат таблицы монтирования:
+Вывод файла /etc/fstab
+
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/disk/by-uuid/2daf76a1-e7b2-4e65-b7d2-68d6e4ce2dec / ext4 defaults 0 1
+/swap.img        none            swap    sw               0       0
+
+Анализ etc/fstab:
+/dev/disk/by-uuid/2daf76a1-e7b2-4e65-b7d2-68d6e4ce2dec / ext4 defaults 0 1
+Тип ФС - ext4
+/ — корневая файловая система
+defaults — стандартные параметры монтирования
+
+/swap.img        none            swap    sw               0       0
+/swap.img
+swap — виртуальная память
+Раздел подкачки используется системой для виртуальной памяти, не имеет точки монтирования.
+
+11.3. Максимально возможный путь ФС:
+В Linux максимальная длина пути определена константой PATH_MAX в заголовочном файле <limits.h>:
+dinar@Ubuntu:~$  grep PATH_MAX /usr/include/linux/limits.h
+#define PATH_MAX        4096	/* # chars in a path name including nul */
+
+Ограничение = 4096 символов.
+
+Нахождение самого длинного пути:
+dinar@Ubuntu:~$ sudo find / -type d | awk '{ print length, $0 }' | sort -n | tail -n 1
+
+[sudo] пароль для dinar: 
+184 /home/dinar/snap/firefox/common/.mozilla/firefox/ona1fkf5.default/storage/default/https+++www.youtube.com^partitionKey=%28https%2Cgoogle.com%29/idb/443794820LCo7g%sCD7a%t2a7b0a2s.files
+
+
+Задание 12. Утилита file:
+12.1. file:
+Утилита file предназначена для определения типа файла в UNIX-подобных операционных системах. Она работает на основе анализа содержимого файла и сопоставления его с данными, содержащимися в базе магических чисел.
+Алгоритм её работы включает следующие шаги:
+    1. Чтение заголовка файла: Утилита считывает первые несколько байтов файла.
+    2. Сравнение с магическими числами: Прочитанные данные сравниваются с шаблонами в базе данных magic, расположенной по пути /usr/share/file/magic.mgc.
+    3. Определение типа файла: Если происходит совпадение, утилита возвращает тип файла.
+Пример:
+dinar@Ubuntu:~$ hexdump -n 64 -C log.log 
+
+00000000  d0 9b d0 b0 d1 8e d0 be  d1 80 d0 b0 d1 82 d0 be  |................|
+00000010  d1 80 d0 bd d0 b0 d1 8f  20 d1 80 d0 b0 d0 b1 d0  |........ .......|
+00000020  be d1 82 d0 b0 20 31 0a  0a 0a d0 a4 d0 98 d0 9e  |..... 1.........|
+00000030  3a 0a d0 a5 d0 b0 d0 b9  d1 80 d1 83 d0 bb d0 bb  |:...............|
+00000040
+
+Магическое число:
+0xd0 9b d0 d1
+
+12.2 Утилита  file  с разными флагами:
+Пример на основе файла 12_task.txt:
+dinar@Ubuntu:~$ touch 12_task.txt
+
+Определение типа файла:
+dinar@Ubuntu:~$ file 12_task.txt 
+
+12_task.txt: ASCII text
+
+Вывод только типа файла:
+dinar@Ubuntu:~$ file -b 12_task.txt 
+
+ASCII text
+
+Вывод MIME файла:
+dinar@Ubuntu:~$ file -i 12_task.txt
+
+12_task.txt: text/plain; charset=us-ascii
+
+Анализ содержимого символической ссылки:
+dinar@Ubuntu:~$ file -L 12_task_link
+
+12_task_link: ASCII text
+
+12.3. Добавление собственного типа файла:
+Создание файла с новым форматом:
+dinar@Ubuntu:~$ echo "TEST" > test.test
+Создание локального файла magic,  запись нового формата:
+dinar@Ubuntu:~$ touch .magic
+dinar@Ubuntu:~$ sudo echo "0 string TEST test type" >> .magic
+dinar@Ubuntu:~$ sudo file -C -m .magic
+dinar@Ubuntu:~$ file test.test
+
+test.test: test type
+
+Файл собственного типа был успешно создан.
+
+
+    
+
+
+
+
