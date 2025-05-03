@@ -1,0 +1,1037 @@
+Лабораторная работа 2
+
+
+ФИО:
+Хайруллов Динар Линарович
+
+
+Группа:
+3342
+
+
+Вывод текущей даты и времени:
+dinar@Ubuntu:~$ date
+
+Пн 21 апр 2025 15:55:56 UTC
+
+
+Информация о процессоре:
+dinar@Ubuntu:~$ lscpu
+
+Архитектура:                          x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Порядок байт:                         Little Endian
+CPU(s):                               4
+On-line CPU(s) list:                  0-3
+ID прроизводителя:                    AuthenticAMD
+Имя модели:                           AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+Семейство ЦПУ:                        23
+Модель:                               24
+Потоков на ядро:                      1
+Ядер на сокет:                        4
+Сокетов:                              1
+Степпинг:                             1
+BogoMIPS:                             4192,11
+Флаги:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 avx2 bmi2 rdseed adx clflushopt sha_ni arat
+Разработчик гипервизора:              KVM
+Тип виртуализации:                    полный
+L1d cache:                            128 KiB (4 instances)
+L1i cache:                            256 KiB (4 instances)
+L2 cache:                             2 MiB (4 instances)
+L3 cache:                             16 MiB (4 instances)
+NUMA node(s):                         1
+NUMA node0 CPU(s):                    0-3
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Mitigation; untrained return thunk; SMT disabled
+Vulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:      Not affected
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+
+Информация о системе:
+dinar@Ubuntu:~$ uname -a
+
+Linux Ubuntu 6.11.0-21-generic #21~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 24 16:52:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+
+1. Задание 1. Управление заданиями:
+1.1
+dinar@Ubuntu:~$ sleep 15 & sleep 10 & (sleep 5; notify-send "Process sleep 5 is finished") &
+[1] 6395
+[2] 6396
+[3] 6397
+
+dinar@Ubuntu:~$ jobs
+[1]   Запущен          sleep 15 &
+[2]-  Запущен          sleep 10 &
+[3]+  Запущен          ( sleep 5; notify-send "Process sleep 5 is finished" ) &
+
+dinar@Ubuntu:~$ jobs
+[1]   Запущен          sleep 15 &
+[2]-  Запущен          sleep 10 &
+[3]+  Завершён        ( sleep 5; notify-send "Process sleep 5 is finished" )
+
+Получено уведомление о завершении процесса
+
+dinar@Ubuntu:~$ jobs
+[1]-  Запущен          sleep 15 &
+[2]+  Запущен          sleep 10 &
+
+dinar@Ubuntu:~$ jobs
+[1]-  Запущен          sleep 15 &
+[2]+  Завершён        sleep 10
+
+dinar@Ubuntu:~$ jobs
+[1]+  Запущен          sleep 15 &
+
+dinar@Ubuntu:~$ jobs
+[1]+  Завершён        sleep 15
+
+dinar@Ubuntu:~$ sleep 20 & sleep 15 & sleep 10 &
+[1] 6932
+[2] 6933
+[3] 6934
+
+dinar@Ubuntu:~$ jobs
+[1]   Запущен          sleep 20 &
+[2]-  Запущен          sleep 15 &
+[3]+  Запущен          sleep 10 &
+
+dinar@Ubuntu:~$ fg % 3
+sleep 10
+
+Невыполненное задание было под номером 3(sleep 10) было переведено в активный режим в данном терминале
+
+dinar@Ubuntu:~$ sleep 12 & sleep 10 & 
+[1] 7129
+[2] 7130
+
+dinar@Ubuntu:~$ jobs
+[1]-  Запущен          sleep 12 &
+[2]+  Запущен          sleep 10 &
+
+dinar@Ubuntu:~$ kill 7129
+dinar@Ubuntu:~$ jobs
+
+[1]-  Завершено      sleep 12
+[2]+  Запущен          sleep 10 &
+
+Невыполненное задание sleep 12 было отменено с помощью команды kill
+
+
+1.2.
+dinar@Ubuntu:~$ nohup sleep 100 &
+[1] 7390
+
+dinar@Ubuntu:~$ nohup: ввод игнорируется, вывод добавляется в 'nohup.out'
+dinar@Ubuntu:~$ ps aux | grep sleep
+dinar       7390  0.0  0.0  17436  2240 pts/0    S    21:28   0:00 sleep 100
+dinar       7392  0.0  0.0  17836  2300 pts/0    S+   21:28   0:00 grep --color=auto sleep
+
+Выход из терминала
+dinar@Ubuntu:~$ exit
+
+dinar@Ubuntu:~$ ps aux | grep sleep
+dinar       7390  0.0  0.0  17436  2240 ?        S    21:28   0:00 sleep 100
+dinar       7434  0.0  0.0  17836  2144 pts/0    S+   21:28   0:00 grep --color=auto sleep
+
+dinar@Ubuntu:~$ kill 7390
+dinar@Ubuntu:~$ ps aux | grep sleep
+dinar       7437  0.0  0.0  17836  2316 pts/0    S+   21:29   0:00 grep --color=auto sleep
+
+После выхода из терминала фоновый процесс, запущенный с командой nohup, не завершился. В этом и состоит суть запуска процессов с командой nohup: процессы будут игнорировать сигнал SIGHUP, который завершает процессы при выходе из терминала. Поэтому при повторном запуске терминала процесс отображается в таблице процессов. Для завершения процесса использовалась команда kill.
+
+
+1.3.
+dinar@Ubuntu:~$ ps -eo uid,pid,comm | head -5
+  UID     PID COMMAND
+    0       1 systemd
+    0       2 kthreadd
+    0       3 pool_workqueue_release
+    0       4 kworker/R-rcu_gp
+    
+dinar@Ubuntu:~$ ps -eo uid,pid,comm | tail -5
+    0    7609 kworker/3:2
+    0    7610 kworker/3:3
+    0    7624 kworker/u16:2-flush-8:0
+ 1000    7653 ps
+ 1000    7654 tail
+ 
+Минимальное значение UID = 0. Оно принадлежит суперпользователю(root)
+Минимальное значение PID = 1. Оно принадлежит процессу systemd - родителю всех остальных процессов.
+Максимальное значение PID = 7654 на момент выполнения ps. Оно принадлежит команде tail.
+Максимально возможное значение PID хранится в /proc/sys/kernel/pid_max:
+dinar@Ubuntu:~$ cat /proc/sys/kernel/pid_max
+4194304
+
+Максимально возможное значение PID = 4194304.
+
+
+1.4.
+Системные процессы имеют маленькое значение PID (обычно <1000);
+UID таких процессов = 0, то есть они запущены от имени суперпользователя (root), либо < 1000.
+dinar@Ubuntu:~$ ps -eo uid,pid,comm | awk '$1 == 0' | head -n 15
+
+    0       1 systemd
+    0       2 kthreadd
+    0       3 pool_workqueue_release
+    0       4 kworker/R-rcu_gp
+    0       5 kworker/R-sync_wq
+    0       6 kworker/R-slub_flushwq
+    0       7 kworker/R-netns
+    0      10 kworker/0:0H-events_highpri
+    0      12 kworker/R-mm_percpu_wq
+    0      13 rcu_tasks_kthread
+    0      14 rcu_tasks_rude_kthread
+    0      15 rcu_tasks_trace_kthread
+    0      16 ksoftirqd/0
+    0      17 rcu_preempt
+    0      18 rcu_exp_par_gp_kthread_worker/0
+
+dinar@Ubuntu:~$ sleep 20 &
+[1] 7997
+dinar@Ubuntu:~$ ps -eo uid,pid,ppid,comm | grep -E 'sleep|systemd'
+
+    0       1       0 systemd
+    0     265       1 systemd-journal
+  990     457       1 systemd-oomd
+  991     466       1 systemd-resolve
+  996     476       1 systemd-timesyn
+    0     808       1 systemd-logind
+ 1000    7997    7422 sleep
+ 
+Можно заметить, что UID  у пользовательского процесса = 1000, в то время как у системных процессов оно < 1000, то же самое можно сказать и про PID. К тому же PPID системных процессов = 0, 1. То есть это родительский процесс и дочерние от него процессы. У пользовательского процесса sleep PPID = 7442.
+
+Одни из ключевых системных процессов:
+systemd: Менеджер всех процессов (PID=1), инициализация системы.
+kthreadd: Ядерный поток для создания фоновых процессов ядра (PID=2).
+dbus: Системный IPC-демон для обмена сообщениями между процессами.
+sshd: Демон SSH для удалённого доступа.
+
+
+1.5.
+Вывод информации о родительском процессе systemd:
+
+dinar@Ubuntu:~$ cat /proc/1/status
+Name:	systemd
+Umask:	0000
+State:	S (sleeping)
+Tgid:	1
+Ngid:	0
+Pid:	1
+PPid:	0
+TracerPid:	0
+Uid:	0	0	0	0
+Gid:	0	0	0	0
+FDSize:	512
+Groups:	 
+NStgid:	1
+NSpid:	1
+NSpgid:	1
+NSsid:	1
+Kthread:	0
+VmPeak:	   23340 kB
+VmSize:	   23164 kB
+VmLck:	       0 kB
+VmPin:	       0 kB
+VmHWM:	   13648 kB
+VmRSS:	   13648 kB
+RssAnon:	    4352 kB
+RssFile:	    9296 kB
+RssShmem:	       0 kB
+VmData:	    4140 kB
+VmStk:	     132 kB
+VmExe:	      44 kB
+VmLib:	   12188 kB
+VmPTE:	      92 kB
+VmSwap:	       0 kB
+HugetlbPages:	       0 kB
+CoreDumping:	0
+THP_enabled:	1
+untag_mask:	0xffffffffffffffff
+Threads:	1
+SigQ:	0/15363
+SigPnd:	0000000000000000
+ShdPnd:	0000000000000000
+SigBlk:	7fefc1fe28014a03
+SigIgn:	0000000000001000
+SigCgt:	00000000000004ec
+CapInh:	0000000000000000
+CapPrm:	000001ffffffffff
+CapEff:	000001ffffffffff
+CapBnd:	000001ffffffffff
+CapAmb:	0000000000000000
+NoNewPrivs:	0
+Seccomp:	0
+Seccomp_filters:	0
+Speculation_Store_Bypass:	not vulnerable
+SpeculationIndirectBranch:	always enabled
+Cpus_allowed:	f
+Cpus_allowed_list:	0-3
+Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
+Mems_allowed_list:	0
+voluntary_ctxt_switches:	3453
+nonvoluntary_ctxt_switches:	1565
+x86_Thread_features:	
+x86_Thread_features_locked:
+
+Вывод определенных значений из /proc/1/status:
+
+dinar@Ubuntu:~$ cat /proc/1/status | grep -E 'Name|PPid|State|Uid|Gid|Threads'
+Name:	systemd
+State:	S (sleeping)
+PPid:	0 
+Uid:	0	0	0	0
+Gid:	0	0	0	0
+Threads:	1
+
+PPID = 0 - у процесса systemd нет пользовательского родителя;
+State:	S (sleeping) - состояние процесса - спящий;
+UID = 0 - запущено от суперпользователя;
+GID = 0 - группа root;
+Threads: 1 - один управляющий поток.
+
+
+2. Задание 2. Порождение и запуск процессов:
+2.1.
+Для выполнения задания была написана программа на языке C 2.1.c. Вывод программы с однократными вычислениями:
+dinar@Ubuntu:~$ gcc 2.1.c -o 2.1.out
+dinar@Ubuntu:~$ ./2.1.exe
+Child modified shared_var = 150
+Parent's unmodified shared_var = 100
+Child finished working
+Parent received child finish signal. Parent finished.
+Program finished (PID=9792).
+
+Можно увидеть, что адресные пространства изолированы (изменения в одном процессе не видны в другом), ведь родительских процесс игнорирует изменения значения shared_var в дочернем процессе.
+Можно сделать вывод, что fork() создаёт копию памяти, но не общее пространство.
+
+Вывод программы с циклами, при которых наблюдается конкуренция процессов:
+dinar@Ubuntu:~$ gcc 2.1.c -o 2.1.out
+dinar@Ubuntu:~$ ./2.1.out
+Parent Process: PID = 9537, PPID = 7422
+Child Process: PID = 9538, PPID = 9537
+Parent working... (0)
+Child working... (0)
+Child working... (1)
+Parent working... (1)
+Parent working... (2)
+Child working... (2)
+Parent working... (3)
+Child working... (3)
+Child working... (4)
+Parent working... (4)
+Child finished working
+Parent received child finish signal. Parent finished.
+Program finished (PID=9537).
+
+
+В выводе можем наблюдать чередование выводов от процессов родителя и потомка. Что подтверждает псевдораспараллеливание при использовании fork.
+
+
+2.2.
+Для выполнения задания были написаны 2 программы parent.c и child.c. Вывод программы parent в обычном режиме:
+dinar@Ubuntu:~$ gcc parent.c -o parent
+dinar@Ubuntu:~$ gcc child.c -o child
+dinar@Ubuntu:~$ ./parent
+Parent started (PID=11734, PPID=7422)
+Child started (PID=11737, PPID=11734)
+Child finished (PID=11737)
+Parent finished (PID=11734)
+
+Вывод таблицы процессов до и после fork:
+dinar@Ubuntu:~$ cat log_parent_before.txt 
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    7422    7415  0  80   0 -  5080 do_wai pts/0    00:00:00 bash
+0 S  1000   11734    7422  0  80   0 -   670 do_wai pts/0    00:00:00 parent
+0 S  1000   11735   11734  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000   11736   11735  0  80   0 -  5630 -      pts/0    00:00:00 ps
+
+dinar@Ubuntu:~$ cat log_parent_after.txt 
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    7422    7415  0  80   0 -  5080 do_wai pts/0    00:00:00 bash
+0 S  1000   11734    7422  0  80   0 -   670 do_wai pts/0    00:00:00 parent
+0 S  1000   11737   11734  0  80   0 -   670 hrtime pts/0    00:00:00 child
+0 S  1000   11738   11734  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000   11739   11738  0  80   0 -  5630 -      pts/0    00:00:00 ps
+
+После fork в таблице появляется процесс child.
+
+Вывод программы в фоновом режиме:
+dinar@Ubuntu:~$ ./parent &
+[1] 11836
+dinar@Ubuntu:~$ Parent started (PID=11836, PPID=7422)
+Child started (PID=11840, PPID=11836)
+Child finished (PID=11840)
+Parent finished (PID=11836)
+
+[1]+  Завершён        ./parent
+
+dinar@Ubuntu:~$ cat log_parent_before.txt 
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    7422    7415  0  80   0 -  5080 do_sel pts/0    00:00:00 bash
+0 S  1000   11836    7422  0  80   0 -   670 do_wai pts/0    00:00:00 parent
+0 S  1000   11837   11836  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000   11838   11837  0  80   0 -  5630 -      pts/0    00:00:00 ps
+
+dinar@Ubuntu:~$ cat log_parent_after.txt 
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    7422    7415  0  80   0 -  5080 do_sel pts/0    00:00:00 bash
+0 S  1000   11836    7422  0  80   0 -   670 do_wai pts/0    00:00:00 parent
+0 S  1000   11840   11836  0  80   0 -   670 hrtime pts/0    00:00:00 child
+0 S  1000   11841   11836  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000   11842   11841  0  80   0 -  5630 -      pts/0    00:00:00 ps
+
+При запуске родительского процесса в фоне (через &):
+Управление сразу возвращается терминалу
+Дочерний процесс сохраняет привязку к тому же терминалу (TTY)
+Оба процесса продолжают работать в фоновом режиме
+
+
+2.3.
+Для выполнения работы была написана программы 2_3.c. Вывод программы:
+dinar@Ubuntu:~/2$ touch 2_3.c
+dinar@Ubuntu:~/2$ gcc 2_3.c -o 2_3.out
+dinar@Ubuntu:~/2$ ./2_3.out
+
+Parent: PID=8058, MYVAR=ParentValue
+
+[execle] Running /usr/bin/env with new environment via execle...
+MYVAR=ChildValue
+
+[execlp] Running echo via execlp (PATH search)...
+Message via execlp
+
+[execvp] Running sh with env command via execvp...
+MYVAR=ParentValue
+
+[execve] Running /usr/bin/env with arguments and environment via execve...
+MYVAR=ChildValue
+HOME=/tmp
+Parent: PID=8058 finished
+
+
+2.4.
+Для выполнения задания была написана программа 2_4.c, в которой создаются различные сценарии работы родительских и дочерних процессов.
+dinar@Ubuntu:~/2$ touch 2_4.c
+dinar@Ubuntu:~/2$ gcc 2_4.c -o 2_4.out
+dinar@Ubuntu:~/2$ ./2_4.out 
+Scenario A: Parent waits for child
+Parent A: Waiting for child A (PID=4898)...
+
+--- Scenario A: Before normal completion ---
+Child A: PID=4898, PPID=4896. Working...
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4923 do_wai pts/0    00:00:00 bash
+0 S  1000    4896    4070  0  80   0 -   670 do_wai pts/0    00:00:00 2_4.out
+1 S  1000    4898    4896  0  80   0 -   670 hrtime pts/0    00:00:00 2_4.out
+0 S  1000    4900    4896  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    4901    4900 99  80   0 -  5629 -      pts/0    00:00:00 ps
+0 S  1000    4902    4900  0  80   0 -  4361 pipe_r pts/0    00:00:00 tee
+Child A: Finished.
+Parent A: Child A finished.
+
+--- Scenario A: Normal completion (child waited) ---
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4923 do_wai pts/0    00:00:00 bash
+0 S  1000    4896    4070  0  80   0 -   670 do_wai pts/0    00:00:00 2_4.out
+0 S  1000    4905    4896  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    4906    4905 99  80   0 -  5629 -      pts/0    00:00:00 ps
+0 S  1000    4907    4905  0  80   0 -  4361 pipe_r pts/0    00:00:00 tee
+
+Scenario B: Parent exits before child
+Parent B (intermediate): PID=4915. Created child (PID=4916), exiting...
+Child B: PID=4916, initial PPID=4915. Sleeping...
+
+--- Scenario B: Orphan adopted by systemd --user ---
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4923 do_wai pts/0    00:00:00 bash
+0 S  1000    4896    4070  0  80   0 -   670 do_wai pts/0    00:00:00 2_4.out
+1 S  1000    4916    1759  0  80   0 -   670 hrtime pts/0    00:00:00 2_4.out
+0 S  1000    4920    4896  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    4921    4920 99  80   0 -  5629 -      pts/0    00:00:00 ps
+0 S  1000    4922    4920  0  80   0 -  4361 pipe_r pts/0    00:00:00 tee
+Child B: Woke up. New PPID=1759
+
+Scenario C: Zombie creation (no wait yet)
+Child C: PID=4924, PPID=4896. Exiting immediately.
+Parent C: PID=4896. Child should be zombie now.
+
+--- Scenario C: Zombie process (before wait) ---
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4923 do_wai pts/0    00:00:00 bash
+0 S  1000    4896    4070  0  80   0 -   670 do_wai pts/0    00:00:00 2_4.out
+1 Z  1000    4924    4896  0  80   0 -     0 -      pts/0    00:00:00 2_4.out
+0 S  1000    4929    4896  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    4930    4929 99  80   0 -  5629 -      pts/0    00:00:00 ps
+0 S  1000    4931    4929  0  80   0 -  4361 pipe_r pts/0    00:00:00 tee
+Parent C: Waited for child C, zombie cleared.
+
+--- Scenario C: Zombie cleared after wait() ---
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4923 do_wai pts/0    00:00:00 bash
+0 S  1000    4896    4070  0  80   0 -   670 do_wai pts/0    00:00:00 2_4.out
+0 S  1000    4933    4896  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    4934    4933 99  80   0 -  5629 -      pts/0    00:00:00 ps
+0 S  1000    4935    4933  0  80   0 -  4361 pipe_r pts/0    00:00:00 tee
+
+Main process (PID=4896) finished.
+
+В сценарии А родительский процесс дожидается завершения дочернего процесса, после этого дочерний процесс не отображается в таблице процессов.
+
+В сценарии Б родительский процесс полностью завершается до завершения дочернего процесса. В этом случае у дочернего процесса сменяется родительский процесс. Это изменение можно увидеть в выводе таблицы процессов до и после завершения первого родительского процесса. PPID дочернего процесса изменяется со значения 4915 на 1759. Процесс 1759 является менеджером пользовательского сеанса, родительским процессом для него явялется systemd. Покажем это:
+dinar@Ubuntu:~/2$ ps -p 1759 -o pid,ppid,cmd
+    PID    PPID CMD
+   1759       1 /usr/lib/systemd/systemd --user
+PPID этого процесса = 1, что является PID systemd.
+
+Менеджер пользовательской сессии управляет пользовательскими сервисами, фоновыми процессами, усыновлением осиротевших процессов, как в нашем случае.
+
+В сценарии С родительский процесс не дожидается завершения дочернего процесса, поэтому в таблице процессов дочерний процесс отображается со статусом Z (zombie). После того, как родительский процесс дождался завершения дочернего с помощью waitpid, дочерний процесс полностью завершается и исчезает из таблицы процессов.
+
+
+3. Задание 3. Управление процессами посредством сигналов (Linux):
+3.1.
+Для выполнения задания были написаны программы father.c, son1.c, son2.c, son3.с и Makefile для их компиляции:
+dinar@Ubuntu:~/3/3_1$ touch father.c son1.c son2.c son3.c Makefile
+dinar@Ubuntu:~/3/3_1$ make
+dinar@Ubuntu:~/3/3_1$ ./father
+
+Son1 (PID=6941): Default SIGTERM handler (will terminate)
+Son3 (PID=6943): Custom SIGTERM handler installed
+Son2 (PID=6942): Ignoring SIGTERM (will NOT terminate)
+Father process sending SIGTERM signal to all son processes.
+Son3 (PID=6943): Custom SIGTERM handler (signal 15)
+
+Можем увидеть сообщение, выводимое обработчиком сигнала SIGTERM son3, что означает то, что son3 перехватил сигнал SIGTERM от father.
+Проанализируем процессы до и после отправки сигналов:
+До:
+  UID     PID          PENDING          BLOCKED          IGNORED           CAUGHT STAT TTY        TIME COMMAND
+ 1000    1836 0000000000000000 0000000000000000 0000000000001000 0000000100004000 Ssl+ tty2       0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    1854 0000000000000000 0000000000000000 0000000000001000 0000000100004003 Sl+  tty2       0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    2701 0000000000000000 0000000000010000 0000000000384004 000000004b813efb Ss   pts/0      0:00 bash
+ 1000    6940 0000000000000000 0000000000010000 0000000000000006 0000000000000000 S+   pts/0      0:00 ./father
+ 1000    6941 0000000000000000 0000000000000000 0000000000000000 0000000000000000 S+   pts/0      0:00 son1
+ 1000    6942 0000000000000000 0000000000000000 0000000000004000 0000000000000000 S+   pts/0      0:00 son2
+ 1000    6943 0000000000000000 0000000000000000 0000000000000000 0000000000004000 S+   pts/0      0:00 son3
+ 1000    6944 0000000000000000 0000000000000000 0000000000000000 0000000000010002 S+   pts/0      0:00 sh -c -- ps -s >> signals_before_log.txt
+ 1000    6945 0000000000000000 0000000000000000 0000000000000000 000000007391fef9 R+   pts/0      0:00 ps -s
+
+После:
+  UID     PID          PENDING          BLOCKED          IGNORED           CAUGHT STAT TTY        TIME COMMAND
+ 1000    1836 0000000000000000 0000000000000000 0000000000001000 0000000100004000 Ssl+ tty2       0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    1854 0000000000000000 0000000000000000 0000000000001000 0000000100004003 Sl+  tty2       0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    2701 0000000000000000 0000000000010000 0000000000384004 000000004b813efb Ss   pts/0      0:00 bash
+ 1000    6940 0000000000000000 0000000000010000 0000000000000006 0000000000000000 S+   pts/0      0:00 ./father
+ 1000    6941 0000000000004000 0000000000000000 0000000000000000 0000000000000000 Z+   pts/0      0:00 [son1] <defunct>
+ 1000    6942 0000000000000000 0000000000000000 0000000000004000 0000000000000000 S+   pts/0      0:00 son2
+ 1000    6943 0000000000000000 0000000000004000 0000000000000000 0000000000004000 Z+   pts/0      0:00 [son3] <defunct>
+ 1000    6946 0000000000000000 0000000000000000 0000000000000000 0000000000010002 S+   pts/0      0:00 sh -c -- ps -s >> signals_after_log.txt
+ 1000    6947 0000000000000000 0000000000000000 0000000000000000 000000007391fef9 R+   pts/0      0:00 ps -s
+ 
+Можно увидеть, что процессы son1 и son3 завершились и их статус - Z, что означает, что дочерние процессы заершились, но т.к. процесс father не получил сигнал о завершении дочернего процесса, то процессы son1 и son3 - зомби-процессы. А son2 в свою очередь игнорирует сигнал, поэтому его статус остается таким же, как и до отправки сигнала с помощью kill, - S, состояние ожидания.
+
+Если же просмотреть процессы после двух команд wait в процессе father, то можно увидеть, что в таблице процессов нет процессов son1 и son3, т.к. родительский процесс получил сигнал об их завершении, но son2 и сам father все еще будут в состоянии ожидания сигналов:
+  UID     PID          PENDING          BLOCKED          IGNORED           CAUGHT STAT TTY        TIME COMMAND
+ 1000    1836 0000000000000000 0000000000000000 0000000000001000 0000000100004000 Ssl+ tty2       0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    1854 0000000000000000 0000000000000000 0000000000001000 0000000100004003 Sl+  tty2       0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    2701 0000000000000000 0000000000010000 0000000000384004 000000004b813efb Ss   pts/0      0:00 bash
+ 1000    7442 0000000000000000 0000000000010000 0000000000000006 0000000000000000 S+   pts/0      0:00 ./father
+ 1000    7444 0000000000000000 0000000000000000 0000000000004000 0000000000000000 S+   pts/0      0:00 son2
+ 1000    7450 0000000000000000 0000000000000000 0000000000000000 0000000000010002 S+   pts/0      0:00 sh -c -- ps -s >> signals_after_wait_log.txt
+ 1000    7451 0000000000000000 0000000000000000 0000000000000000 000000007391fef9 R+   pts/0      0:00 ps -s
+
+3.2.
+wait(&status) возвращает идентификатор процесса, который завершил работу, -1 в случае ошибки, 0, если использовался флаг WNOHANG (этот флаг означает немедленное возвращение управления, если ни один дочерний процесс не завершил выполнение)
+SIGCHLD - сигнал, который посылает ядро, чтобы уведомить родителя о завершении потомка. Это знак о том, что статус завершившегося процесса можно узнать через wait(). Если явно указать, что этот сигнал нужно игнорировать (с помощью signal(SIGCHLD, SIG_IGN)), ядро посылать сигнал не будет и нельзя будет узнать статус завершения процесса. Это наблюдалось в прошлом задании.
+
+Для выполнения эксперимента была написана программа 3_2.c, в которой родительский процесс отслеживает выполнение процессов с помощью waitpid.
+
+dinar@Ubuntu:~/3$ touch 3_2.c
+dinar@Ubuntu:~/3$ gcc 3_2.c -o 3_2.out
+dinar@Ubuntu:~/3$ ./3_2.out 
+Child 1: PID=6432 running...
+Child 2: PID=6433 running...
+Child 3: PID=6434 running...
+Child 1: finished
+Parent: Caught child PID=6432, exit code = 1
+Parent process is doing some work 
+Child 3: finished
+Child 2: finished
+Parent: Caught child PID=6433, exit code = 2
+Parent: done waiting for selected children. Others may still run or become zombies.
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4070    4063  0  80   0 -  4956 do_wai pts/0    00:00:00 bash
+0 S  1000    6431    4070  0  80   0 -   670 do_wai pts/0    00:00:00 3_2.out
+1 Z  1000    6434    6431  0  80   0 -     0 -      pts/0    00:00:00 3_2.out
+0 S  1000    6437    6431  0  80   0 -   700 do_wai pts/0    00:00:00 sh
+4 R  1000    6438    6437 99  80   0 -  5630 -      pts/0    00:00:00 ps
+
+Можно увидеть, что родительский процесс успешно дождался выполнения процессов 1 и 2, во время ожидания процесса 2 родительский процесс выполнил дополнительный код при ожидании, но так и не дождался завершения процесса 3, поэтому статус процесса 3 - зомби.
+
+
+4. Задание 4. Многонитевое функционирование:
+4.1.
+Для выполнения задания была написана программа, использующая функции clone() и pthread_create(), в ней создается несколько потоков, также демонстрируется доступ потоков к различным участкам памяти. Вывод программы:
+dinar@Ubuntu:~$ touch 4_1.c
+dinar@Ubuntu:~$ gcc 4_1.c -o 4_1.out -pthread
+dinar@Ubuntu:~$ ./4_1.out
+Main: initial heap_var = 100 (address: 0x5d0156f1f2a0)
+-----------------------------------
+Pthread 1: PID = 3027, PPID = 2933, TID = 3028
+Pthread 1: heap_var = 100 (address: 0x5d0156f1f2a0)
+Pthread 1: wrote to fd 3
+Pthread 1: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+Pthread 1: local_var = 10
+Pthread 1: global_var = 2
+-----------------------------------
+Pthread 1: завершил работу.
+Pthread 2: PID = 3027, PPID = 2933, TID = 3029
+Pthread 2: heap_var = 101 (address: 0x5d0156f1f2a0)
+Pthread 2: wrote to fd 3
+Pthread 2: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+Pthread 2: local_var = 10
+Pthread 2: global_var = 4
+-----------------------------------
+Pthread 2: завершил работу.
+Clone-thread 3: PID = 3027, PPID = 2933, TID = 3030
+Clone-thread 3: heap_var = 102 (address: 0x5d0156f1f2a0)
+Clone-thread 3: wrote to fd 3
+Clone-thread 3: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+Clone-thread 3: local_var = 10
+Clone-thread 3: global_var = 8
+-----------------------------------
+Clone-thread 3: завершил работу.
+
+Final heap_var value = 103
+
+
+4.2.
+В выводе программы можно увидеть, что потоки имеют одинаковый PID, PPID которые принадлежат родительскому процессу,но TID (номер самого потока) у нитей отличается. 
+
+
+4.3.
+Можно заметить, что потоки изменяют глобальные переменные и переменные, хранящиеся в куче, эти изменения заметны при выводе значений в процессах, также потоки используют один и тот же файловый дескриптор. Записи в текстовом файле shared_file.txt, показывают что потоки делали успешные записи в файл:
+Pthread 1 writing to file
+Pthread 2 writing to file
+Clone-thread 3 writing to file
+
+Также видно, что потоки разделяют переменные окружения родительского процесса, об этом нам говорит пути PATH.
+Но в то же время, локальные переменные остаются неизменными, что говорит о том, что потоки имеют свой собственный стек, то есть локальные переменные одного потока остаются изолированными от других нитей.
+
+
+4.4.
+Длы выполнения задания была написана программа 4_4.c. Вывод программы:
+dinar@Ubuntu:~$ touch 4_4.c
+dinar@Ubuntu:~$ gcc 4_4.c -o 4_4.out -pthread
+dinar@Ubuntu:~$ ./4_4.out
+Main process (PID: 4796)
+Thread 1 appeared (TID: 4797)
+Thread 1 (TID: 4797) working...
+Thread 2 appeared (TID: 4798)
+Thread 2 (TID: 4798) working...
+Trying to kill thread 2 with TID: 4798
+Убито
+
+В каждом из потоков выполнялся бесконечный цикл, после выполнения kill завршился не только поток, но и весь процесс. То есть для завершения только одного потока, без завершения остальных потоков и главного процесса в целом, нельзя использовать kill.
+
+
+5. Задание 5. Планирование
+5.1.
+Механизм планирования в ОС отвечает за организацию доступа процессов к центральному процессору, определяя очередность и условия выделения вычислительных мощностей.
+Для выполнения задания запустим в фоновом режиме выполнения процесса состоящего из бесконечного цикла. Рассмотрим политику планирования, устанавливаемую по умолчанию:
+dinar@Ubuntu:~/5$ ps -eo pid,policy,pri,ni,cmd | grep -v "\[" | tail -n 3
+   8365 TS   19   0 ./test.out
+   8394 TS   19   0 ps -eo pid,policy,pri,ni,cmd
+   8396 TS   19   0 tail -n 3
+   
+Можем увидеть, что в таблице для отображается TS(time-sharing), что соответствует политике планирования SCHED_OTHER.
+Для рассмотрения процессов с таким планированием была написана программа 5_1.c, в которой дочерние процессы осуществляют вывод своего номера в терминал. Рассмотрим вывод:
+dinar@Ubuntu:~/5$ touch 5_1.c
+dinar@Ubuntu:~/5$ gcc 5_1.c -o 5_1.out
+dinar@Ubuntu:~/5$ ./5_1.out
+Child: 1 | PID: 8589 | PPID: 8588
+1Child: 2 | PID: 8590 | PPID: 8588
+21212122121212121212122121211
+
+Вывод процессов не имеет строгой последовательности, что означает, что процессы выполняются в произвольном порядке: это характерно для политики планирования SCHED_OTHER (по умолчанию)
+
+Наблюдается чередование выполнения:
+Каждый процесс получает квант времени процессора;
+После исчерпания кванта происходит переключение на другой процесс.
+
+
+5.2.
+Различия системных и пользовательских процессов
+Характеристика          | Системные процессы (root) | Пользовательские процессы
+────────────────────────|───────────────────────────|───────────────────────────
+Диапазон nice           | -20 до 19                 | 0 до 19 
+Возможность повышения   | Да (любое значение)       | Только понижение (0→19)
+Фактический PRI         | 1-99 (ядро)               | 100-139 (80 + NI в userspace)
+Типичный приоритет      | Высокий                   | Средний
+Права изменения         | Только root               | Владелец процесса
+
+Для выполнения задания была написана программа 5_2.c. Вывод программы с правами root:
+dinar@Ubuntu:~/5/5_2$ touch 5_2.c
+dinar@Ubuntu:~/5/5_2$ gcc 5_2.c -o 5_2.out
+dinar@Ubuntu:~/5/5_2$ sudo ./5_2.out
+[sudo] пароль для dinar: 
+Comparing and changing priorities of system and user processes
+
+------System process------
+System process                           (PID: 15): Current priority (nice): 0
+
+Trying to change system process priority (PID: 15) increasing by  10...
+System process priority was changed.
+System process priority after changes
+   (PID: 15): Current priority (nice): 10
+
+------User process------
+User process before changes              (PID: 7032): Current priority (nice): 0
+
+Trying to set priority to -10...
+User process priority after changes      (PID: 7032): Current priority (nice): -10
+
+=== End ===
+
+Изменение nice пользовательского процесса: 
+dinar@Ubuntu:~/5/5_2$ nice -n 19 ./test.out &
+[1] 7186
+dinar@Ubuntu:~/5/5_2$ ps elf
+F   UID     PID    PPID PRI  NI    VSZ   RSS WCHAN  STAT TTY        TIME COMMAND
+0  1000    6965    6958  20   0  20268  5760 do_wai Ss   pts/0      0:00 bash SY
+0  1000    7186    6965  39  19   2548  1180 hrtime SN   pts/0      0:00  \_ ./t
+4  1000    7187    6965  20   0  22516  4612 -      R+   pts/0      0:00  \_ ps 
+4  1000    1931    1825  20   0 244760  6336 do_pol Ssl+ tty2       0:00 /usr/li
+0  1000    1940    1931  20   0 307300 16940 do_pol Sl+  tty2       0:00  \_ /us
+dinar@Ubuntu:~/5/5_2$ 
+
+Значение приоритета нашего процесса = 39, nice = 19.
+
+
+5.3.
+5.3.1.
+Для выполения задания была написана программа 5_3_1.c. Вывод программы
+dinar@Ubuntu:~/5/5_3$ touch 5_3_1.c
+dinar@Ubuntu:~/5/5_3$ gcc 5_3_1.c -o 5_3_1.out
+dinar@Ubuntu:~/5/5_3$ sudo ./5_3_1.out 
+[sudo] пароль для dinar: 
+Task 1 completed iteration 1
+Task 1 completed iteration 2
+Task 1 completed iteration 3
+Task 2 completed iteration 1
+Task 2 completed iteration 2
+Task 2 completed iteration 3
+Task 3 completed iteration 1
+Task 3 completed iteration 2
+Task 3 completed iteration 3
+Execution completed.
+
+При одинаковых приоритетах процессы выполняются в порядке запуска (FIFO - First In, First Out)
+
+
+5.3.2.
+Для выполнения задания была написана программа 5_3_2.c. Вывод программы:
+dinar@Ubuntu:~/5/5_3$ touch 5_3_2.c
+dinar@Ubuntu:~/5/5_3$ gcc 5_3_2.c -o 5_3_2.out
+dinar@Ubuntu:~/5/5_3$ ./5_3_2.out 
+Min priority level: 1
+Max priority level: 99
+
+
+5.3.3.
+Для выполнения задания была написана программа 5_3_3.c. Вывод программы:
+dinar@Ubuntu:~/5/5_3$ touch 5_3_3.c
+dinar@Ubuntu:~/5/5_3$ gcc 5_3_3.c -o 5_3_3.out
+dinar@Ubuntu:~/5/5_3$ sudo ./5_3_3.out 
+Process 2 (priority 55) completed iteration 1
+Process 2 (priority 55) completed iteration 2
+Process 2 (priority 55) completed iteration 3
+Process 3 (priority 50) completed iteration 1
+Process 3 (priority 50) completed iteration 2
+Process 3 (priority 50) completed iteration 3
+Process 1 (priority 10) completed iteration 1
+Process 1 (priority 10) completed iteration 2
+Process 1 (priority 10) completed iteration 3
+Execution completed.
+
+Можно увидеть, что сначала выполняются процессы с высшим приоритетом.
+
+
+5.4.
+Для выополнения задания была написана программа 5_4_same_prs.c, в которой процессы имеют одинаковый приоритет. Вывод программы:
+dinar@Ubuntu:~/5/5_4$ touch 5_4_same_prs.c
+dinar@Ubuntu:~/5/5_4$ gcc 5_4_same_prs.c -o 5_4_same_prs.out
+dinar@Ubuntu:~/5/5_4$ sudo ./5_4_same_prs.out 
+Task 1 (priority 30) - iteration 1 at 111501.241 ms
+Task 2 (priority 30) - iteration 1 at 111601.672 ms
+Task 3 (priority 30) - iteration 1 at 111676.752 ms
+Task 1 (priority 30) - iteration 2 at 116700.867 ms
+Task 2 (priority 30) - iteration 2 at 116776.610 ms
+Task 3 (priority 30) - iteration 2 at 117031.413 ms
+Task 2 (priority 30) - iteration 3 at 120721.887 ms
+Task 3 (priority 30) - iteration 3 at 121346.716 ms
+Task 1 (priority 30) - iteration 3 at 121350.913 ms
+Execution completed.
+
+Процессы с одинаковым приоритетом в SCHED_RR выполняются поочерёдно, что подтверждает принцип round-robin - равномерное распределение времени CPU. Переключение между задачами происходит через фиксированные интервалы, несмотря на вычислительную нагрузку. Это гарантирует отсутствие голодания и честное планирование для задач равного приоритета.
+
+Разные приоритеты в 5_4_different_prs.c:
+dinar@Ubuntu:~/5/5_4$ touch 5_4_different_prs.c
+dinar@Ubuntu:~/5/5_4$ gcc 5_4_different_prs.c -o 5_4_different_prs.out
+dinar@Ubuntu:~/5/5_4$ sudo ./5_4_differnt_prs.out 
+Task 3 (priority 40) - iteration 1 at 355518.115 ms
+Task 3 (priority 40) - iteration 2 at 356923.126 ms
+Task 3 (priority 40) - iteration 3 at 358975.154 ms
+Task 2 (priority 35) - iteration 1 at 360256.829 ms
+Task 2 (priority 35) - iteration 2 at 361680.192 ms
+Task 2 (priority 35) - iteration 3 at 363006.257 ms
+Task 1 (priority 30) - iteration 1 at 365170.418 ms
+Task 1 (priority 30) - iteration 2 at 370112.739 ms
+Task 1 (priority 30) - iteration 3 at 375044.925 ms
+Execution completed.
+
+Процессы выполняются в соответствии с очередью по приоритетам.
+
+Программа с добавлением sched_yield (5_4_sched_yeild.c):
+dinar@Ubuntu:~/5/5_4$ touch 5_4_sched_yield.c
+dinar@Ubuntu:~/5/5_4$ gcc 5_4_sched_yield.c -o 5_4_sched_yield.out
+dinar@Ubuntu:~/5/5_4$ sudo ./5_4_sched_yield.out
+Task 3 (priority 40) - iteration 1 at 355518.115 ms
+Task 3 (priority 40) - iteration 2 at 356923.126 ms
+Task 3 (priority 40) - iteration 3 at 358975.154 ms
+Task 2 (priority 35) - iteration 1 at 360256.829 ms
+Task 2 (priority 35) - iteration 2 at 361680.192 ms
+Task 2 (priority 35) - iteration 3 at 363006.257 ms
+Task 1 (priority 30) - iteration 1 at 365170.418 ms
+Task 1 (priority 30) - iteration 2 at 370112.739 ms
+Task 1 (priority 30) - iteration 3 at 375044.925 ms
+Execution completed.
+
+Процессы стали чаще переключаться.
+
+Определение кванта времени:
+dinar@Ubuntu:~/5/5_4$ cat /proc/sys/kernel/sched_rr_timeslice_ms
+100
+
+
+5.5.
+Для выполнения задания была написана программа 5_5.c. Вывод программы 5_5.c:
+dinar@Ubuntu:~/5$ touch 5_5.c
+dinar@Ubuntu:~/5$ gcc 5_5.c -o 5_5.out
+dinar@Ubuntu:~/5$ sudo ./5_5.out
+[1184793.747 ms] Process 4616 (SCHED_RR) - iteration 1
+[1185020.252 ms] Process 4616 (SCHED_RR) - iteration 2
+[1185247.012 ms] Process 4616 (SCHED_RR) - iteration 3
+[1185470.269 ms] Process 4616 (SCHED_RR) - iteration 4
+[1185694.374 ms] Process 4616 (SCHED_RR) - iteration 5
+[1185928.755 ms] Process 4617 (SCHED_FIFO) - iteration 1
+[1186159.561 ms] Process 4617 (SCHED_FIFO) - iteration 2
+[1186383.646 ms] Process 4617 (SCHED_FIFO) - iteration 3
+[1186837.440 ms] Process 4617 (SCHED_FIFO) - iteration 4
+[1187097.110 ms] Process 4617 (SCHED_FIFO) - iteration 5
+Test completed.
+
+
+Политика FIFO приоритетнее, чем политика RR. Приоритет политик существует и работает так: FIFO > RR > OTHER при одинаковых числовых приоритетах.
+
+
+5.6.
+Для выполнения задания была написана программа 5_6.c. Вывод программы:
+dinar@Ubuntu:~/5/5_6$ touch 5_6.c
+dinar@Ubuntu:~/5/5_6$ gcc 5_6.c -o 5_6.out
+dinar@Ubuntu:~/5/5_6$ ./5_6.out
+Thread: policy = SCHED_OTHER, priority = 0
+
+
+5.6.1.
+Для выполнения задания была написана программа 5_6_1.c. Вывод программы:
+dinar@Ubuntu:~/5/5_6$ touch 5_6_1.c
+dinar@Ubuntu:~/5/5_6$ gcc 5_6_1.c -o 5_6_1.out
+dinar@Ubuntu:~/5/5_6$ sudo ./5_6_1.out
+[sudo] пароль для dinar: 
+(FIFO (75)) started work
+(FIFO (50)) started work
+(FIFO (50)) finished work
+(FIFO (75)) finished work
+All threads completed
+
+При одинаковых политиках FIFO но разных значениях приоритета высокий приоритет доминирует, но есть небольшое начальное перекрытие.
+
+dinar@Ubuntu:~/5/5_6$ sudo ./5_6_1.out
+[sudo] пароль для dinar: 
+(FIFO (50)) started work
+(RR (50)) started work
+(FIFO (50)) finished work
+(RR (50)) finished work
+All threads completed
+
+При разных политиках но одинаковых приоритетах FIFO более агрессивный.
+
+
+5.6.2.
+Для выполнения задания были написаны программы 5_6_fifo.c, 5_6_rr.c, 5_6_other.c. Выводы программ в соответствующем порядке:
+dinar@Ubuntu:~/5/5_6$ touch 5_6_fifo.c
+dinar@Ubuntu:~/5/5_6$ gcc 5_6_fifo.c -o 5_6_fifo.out
+dinar@Ubuntu:~/5/5_6$ ./5_6_fifo.out
+Thread execution log:
+FIFO thread ID: 5964
+FIFO thread ID: 5964
+FIFO thread ID: 5964
+FIFO thread ID: 5964
+FIFO thread ID: 5964
+FIFO thread ID: 5965
+FIFO thread ID: 5965
+FIFO thread ID: 5965
+FIFO thread ID: 5965
+FIFO thread ID: 5965
+FIFO thread ID: 5966
+FIFO thread ID: 5966
+FIFO thread ID: 5966
+FIFO thread ID: 5966
+FIFO thread ID: 5966
+
+5_6_rr.c:
+dinar@Ubuntu:~/5/5_6$ touch 5_6_rr.c
+dinar@Ubuntu:~/5/5_6$ gcc 5_6_rr.c -o 5_6_rr.out
+dinar@Ubuntu:~/5/5_6$ ./5_6_rr.out 
+Thread execution log:
+RR thread ID: 6101
+RR thread ID: 6102
+RR thread ID: 6103
+RR thread ID: 6103
+RR thread ID: 6101
+RR thread ID: 6102
+RR thread ID: 6103
+RR thread ID: 6101
+RR thread ID: 6102
+RR thread ID: 6101
+RR thread ID: 6102
+RR thread ID: 6101
+RR thread ID: 6102
+RR thread ID: 6103
+RR thread ID: 6103
+
+5_6_other.c:
+dinar@Ubuntu:~/5/5_6$ touch 5_6_other.c
+dinar@Ubuntu:~/5/5_6$ gcc 5_6_other.c -o 5_6_other.out
+dinar@Ubuntu:~/5/5_6$ ./5_6_other.out
+Thread execution log:
+OTHER thread ID: 6204
+OTHER thread ID: 6205
+OTHER thread ID: 6206
+OTHER thread ID: 6206
+OTHER thread ID: 6206
+OTHER thread ID: 6206
+OTHER thread ID: 6206
+OTHER thread ID: 6205
+OTHER thread ID: 6204
+OTHER thread ID: 6205
+OTHER thread ID: 6204
+OTHER thread ID: 6204
+OTHER thread ID: 6205
+OTHER thread ID: 6205
+OTHER thread ID: 6204
+
+Сравнение политик планирования на основе вывода программ:
+
+Политика      | Особенность                     | Пример выполнения                               
++-------------+---------------------------------+-------------------------------------------------+
+SCHED_OTHER   | Динамическое распределение      | Хаотичное чередование (21456, 21457, 21458,    
+              |                                 | 21456...)                                       
+SCHED_FIFO    | Без вытеснения (FIFO-очередь)   | Полное выполнение по одному (21515, 21515,      
+              |                                 | 21515... 21516, 21516...)                       
+SCHED_RR      | Циклическое квантование         | Поочерёдное выполнение (21547, 21548, 21549,    
+              |                                 | 21547...)                                       
+
+
+Задание 6. Наследование
+6.1.
+Для выполнения задания была написана программа 6_1.c. Вывод программы в файле shared_data.txt:
+Parent process process (PID: 6519)
+Child process process (PID: 6520)
+
+При запуске основной процесс создает файл и назначает ему разрешения 644. Это означает, что право записи в файл предоставляется исключительно владельцу. При создании дочернего процесса происходит наследование всех открытых файловых дескрипторов. В результате порожденный процесс получает доступ к тем же файловым ресурсам, что и родительский, с сохранением установленных прав доступа.
+
+6.2.
+Для выполнения задания была написана программа 6_2.c. Вывод программы:
+dinar@Ubuntu:~/6$ touch 6_2.c
+dinar@Ubuntu:~/6$ gcc 6_2.c -o 6_2.out
+dinar@Ubuntu:~/6$ sudo ./6_2.out
+[sudo] пароль для dinar: 
+Parent process process info:
+  PID: 6694
+  policy planning: 1 (FIFO)
+  Приоритет: 35
+
+Child process process info:
+  PID: 6695
+  policy planning: 1 (FIFO)
+  Приоритет: 35
+
+
+Дочерний процесс успешно унаследовал политику реального времени (SCHED_FIFO) и приоритет (35) от родительского процесса, что подтверждает полное копирование параметров планирования при fork().
+
+
+6.3.
+Для выполнения задания были написаны программы 6_3_parent.c и 6_3_child.c. Вывод работы программы:
+dinar@Ubuntu:~/6$ touch 6_3_parent.c
+dinar@Ubuntu:~/6$ touch 6_3_chld.c
+dinar@Ubuntu:~/6$ gcc 6_3_parent.c -o 6_3_parent.out
+dinar@Ubuntu:~/6$ gcc 6_3_child.c -o 6_3_child.out
+dinar@Ubuntu:~/6$ ./6_3_parent.out
+Child process [PID:7104]: Sending SIGUSR1 to exec
+Signal received: 10 (User defined signal 1)
+Child: Got parameter 'custom_param'
+Child [PID:7104, PPID:7103] waits for signal
+
+Parent process [PID:7103]:
+1. Sending SIGUSR1 to self
+Signal received: 10 (User defined signal 1)
+2. Sending SIGUSR1 to child process [PID:7104]
+Child [PID:7104]: Signal received 10 (User defined signal 1)
+
+Программа демонстрирует поведение обработчиков сигналов при fork() и exec():
+Исходная конфигурация:
+Родительский процесс устанавливает обработчик custom_signal_handler для SIGUSR1
+Обработчик выводит информацию о полученном сигнале
+
+После fork():
+Дочерний процесс наследует текущую диспозицию сигналов
+Обработчик SIGUSR1 остаётся тем же (custom_signal_handler)
+Дочерний процесс успешно получает и обрабатывает SIGUSR1 через raise()
+
+После execv():
+Происходит замена образа процесса на signal_receiver
+Все установленные обработчики сбрасываются в SIG_DFL
+Программа signal_receiver явно переустанавливает обработчик (receiver_handler)
+
+Взаимодействие процессов:
+Родитель может отправлять сигналы дочернему процессу после exec()
+Дочерний процесс обрабатывает их новым обработчиком
+Бесконечный цикл в signal_receiver обеспечивает постоянную готовность к приёму сигналов
+
+Ключевые наблюдения:
+fork() сохраняет диспозицию сигналов
+exec() сбрасывает обработчики в состояние по умолчанию
+Новый обработчик должен быть явно установлен после exec()
+SIGUSR1 позволяет тестировать межпроцессное взаимодействие
+
+
+6.4.
+clone() позволяет точно контролировать, какие ресурсы разделяются между процессами, а какие копируются, через флаги
+CLONE_FILES Общие файловые дескрипторы
+CLONE_FS Общая файловая система (корень, CWD, umask)
+CLONE_VM Общее адресное пространство (память)
+CLONE_SIGHAND Общие обработчики сигналов
+
